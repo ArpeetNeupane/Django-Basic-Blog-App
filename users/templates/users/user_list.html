@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Users</title>
+</head>
+<body>
+    {% block content %}
+        <h1>Available Users</h1>
+        {% for user in users %}
+            <div style="margin: 15px;display:flex;flex-direction:row;justify-content:flex-start;" class="mt-4">
+                <div style="width:10px;height:10px;border-radius:50%;background-color:rgb(32, 193, 32);margin-top:0.4rem;margin-right:0.4rem;"></div>
+                <li style="list-style:none;display:inline;">{{ user.username }}</li>
+            </div>
+        {% empty %}
+            <h3>No users found.</h3>
+        {% endfor %}
+    {% endblock content %}
+</body>
+</html>

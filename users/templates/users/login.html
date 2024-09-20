@@ -1,0 +1,26 @@
+<!--even within our users app, we can reference templates from our blog app -->
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            <!--using code block to put in CSRF token for added security, form wont work without this-->
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log In</legend>
+                {{ form|crispy }} <!--this much is enough, rest of the wor is done by/in views, .as_p -- using p tag to make form for better indent but after insalling crispy forms, it's no longer needed-->
+            </fieldset>
+            
+            <!--Button is separate from the form so different div-->
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Login</button>
+                <p class="test-muted mt-3 fs-3"><a href="{% url 'password_reset' %}">Forgot Password?</a></small>
+            </div>
+        </form>
+
+        <div class="border-top pt-3">
+            <small class="text-muted">Need An Account? <a href="{% url 'register' %}" class="ml-2">Sign Up Now</a></small>
+        </div> <!--This is how you should put href (see above) -->
+
+    </div>
+{% endblock %}

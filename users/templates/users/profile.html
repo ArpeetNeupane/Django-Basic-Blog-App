@@ -1,0 +1,36 @@
+<!--even within our users app, we can reference templates from our blog app -->
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+          <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"> <!--learned in shell-->
+          <div class="media-body">
+            <h2 class="account-heading mt-4 ml-3">{{ user.username }}</h2>
+            <p class="text-secondary ml-3">{{ user.email }}</p> <!--user represents the current logged in user-->
+          </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data"> <!--if enctype not used, it will look like the form is working but wont actually save image data in the bg-->
+          <!--enctype is crucial when you need to handle file uploads or binary data in your web forms.-->
+          <!--it specifies how the form data should be encoded when it's submitted to the server.-->
+          <!--One should use enctype="multipart/form-data" whenever form includes an <input type="file"> element to allow users to upload files, such as images, documents, or other types of media.-->
+          <!--It ensures that the form data, including the files, is correctly encoded and sent to the server.-->
+          
+          <!--using code block to put in CSRF token for added security, form wont work without this-->
+          {% csrf_token %}
+          <br>
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Profile Info</legend>
+              {{ u_form|crispy }} <!--this much is enough, rest of the work is done by/in views, .as_p -- using p tag to make form for better indent but after insalling crispy forms, it's no longer needed-->
+              <br>
+              {{ p_form.as_p }}
+          </fieldset>
+          
+          <!--Button is separate from the form so different div-->
+          <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Update</button>
+              <a style="margin-left: 450px; color:rgb(1, 251, 251); text-shadow: 1px 1px 1px rgb(74, 73, 73);" href="{% url 'password_change' %}">Change password</a>
+          </div>
+        </form>
+      </div>
+{% endblock content%}

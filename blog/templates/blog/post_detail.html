@@ -1,0 +1,52 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+        <div class="media-body">
+            <div class="article-metadata">
+                <!--when we're dealing with detail view, it expects the context of this template to be called object, so just rename post to object-->
+                <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+                <small class="text-muted mr-2">{{ object.date_posted | date:"r" }}</small>
+                {% if object.author == user %}
+                    <a class="btn btn-secondary btn-sm mt-1 mb-3" href="{% url 'post-update' object.id %}">Update</a>
+                    <a class="btn btn-danger btn-sm mt-1 mb-3" href="{% url 'post-delete' object.id %}">Delete</a>
+                {% endif %}
+            </div>
+            <h2 class="article-title">{{ object.title }}</h2>
+            <p class="article-content">{{ object.content }}</p>
+            <hr>
+            <a class="btn btn-outline-info" href="#">Like</a>
+            <a class="btn btn-outline-info" href="#">Comment</a>
+            <a class="btn btn-outline-info" href="#">Share</a>
+            
+            <div><hr><br></div>
+
+            <h3>Comments</h3>
+            <hr>
+            {% for comment in comments %}
+                <div class="media mb-3">
+                    <div class="media-body">
+                        <a class="mr-2" href="{% url 'user-posts' comment.user.username %}">{{ comment.user }}</a>
+                        <small class="text-muted mr-2">{{ comment.commented_at | date:"r" }}</small>
+                        {% if comment.user == user %}
+                            <a class="btn btn-secondary btn-sm mt-1 mb-3" href="{% url 'comment-update' post.pk comment.pk %}">Update</a>
+                            <a class="btn btn-danger btn-sm mt-1 mb-3" href="{% url 'comment-delete' post.pk comment.pk %}">Delete</a>
+                        {% endif %}
+                        <p>{{ comment.content }}</p>
+                        <hr>
+                    </div>
+                </div>
+            {% empty %} 
+                <p>No comments yet.</p>
+            {% endfor %}
+
+            <h4>Add a comment</h4>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+            </form>
+        </div>
+    </article>
+{% endblock content%} <!--specifying which block is ending, good practice-->

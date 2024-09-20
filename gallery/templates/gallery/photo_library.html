@@ -1,0 +1,15 @@
+{% extends 'gallery/base2.html' %}
+
+{% block content %}
+    <h1>Photo Gallery</h1>
+    <div class="photo-grid">
+        {% for photo in photos %}
+            <div class="photo-item">
+                <img src="{{ photo.image.url }}" alt="Photo">
+                <h4>{{ photo.title }}</h4>
+            </div>
+        {% empty %}
+            <p>No photos available.</p>
+        {% endfor %}
+    </div>
+{% endblock content %}
